@@ -4,6 +4,7 @@ from sqlalchemy.orm import DeclarativeBase
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_caching import Cache
+from flask_cors import CORS
 from flasgger import Swagger
 import os
 
@@ -90,6 +91,7 @@ def create_app(config_class=None):
     db.init_app(app)
     limiter.init_app(app)
     cache.init_app(app)
+    CORS(app)  # Enable CORS for all routes
     Swagger(app, config=swagger_config, template=swagger_template)
     
     # Import and register blueprints
