@@ -39,7 +39,7 @@ def create_app(config_class=None):
     # Determine if we're in production based on environment or config
     is_production = os.getenv('FLASK_ENV') == 'production' or app.config.get('DEBUG') is False
     
-    # Configure Swagger with dynamic host and scheme
+    # Configure Swagger with dynamic host and scheme + custom styling
     swagger_config = {
         "headers": [],
         "specs": [
@@ -52,7 +52,17 @@ def create_app(config_class=None):
         ],
         "static_url_path": "/flasgger_static",
         "swagger_ui": True,
-        "specs_route": "/api-docs/"
+        "specs_route": "/api-docs/",
+        "swagger_ui_config": {
+            "docExpansion": "list",  # 'none', 'list', or 'full'
+            "defaultModelsExpandDepth": 3,
+            "defaultModelExpandDepth": 3,
+            "displayRequestDuration": True,
+            "filter": True,  # Enable search/filter box
+            "showExtensions": True,
+            "showCommonExtensions": True,
+            "displayOperationId": False,
+        }
     }
     
     # Get the base URL from environment variable or use localhost for development
@@ -61,8 +71,30 @@ def create_app(config_class=None):
     swagger_template = {
         "swagger": "2.0",
         "info": {
-            "title": "Mechanic Shop API",
-            "description": "A comprehensive RESTful API for managing mechanic shop operations including customers, mechanics, service tickets, and inventory",
+            "title": "🔧 Mechanic Shop API",
+            "description": """
+## Welcome to Mechanic Shop API!
+
+A comprehensive RESTful API for managing mechanic shop operations.
+
+### Features:
+- 👥 **Customer Management** - Register, login, and manage customer accounts
+- 🔧 **Mechanic Management** - Track mechanics and their work assignments
+- 🎫 **Service Tickets** - Create and manage service requests
+- 📦 **Inventory Management** - Track parts and supplies
+- 🔐 **JWT Authentication** - Secure API access with token-based auth
+- ⚡ **Rate Limiting** - Built-in API rate limiting for security
+- 💾 **Caching** - Optimized performance with intelligent caching
+
+### Getting Started:
+1. Register a customer account using `POST /customers/`
+2. Login to receive a JWT token using `POST /customers/login`
+3. Use the token in Authorization header: `Bearer {your-token}`
+4. Explore the API endpoints below!
+
+### Authentication:
+Click the **Authorize** button (🔓) and enter: `Bearer {your-token}`
+            """,
             "version": "1.0.0",
             "contact": {
                 "name": "Mechanic Shop Team",
@@ -80,10 +112,10 @@ def create_app(config_class=None):
             }
         },
         "tags": [
-            {"name": "Customers", "description": "Customer management endpoints"},
-            {"name": "Mechanics", "description": "Mechanic management endpoints"},
-            {"name": "Service Tickets", "description": "Service ticket management endpoints"},
-            {"name": "Inventory", "description": "Inventory management endpoints"}
+            {"name": "Customers", "description": "👥 Customer management endpoints - Registration, login, profile management"},
+            {"name": "Mechanics", "description": "🔧 Mechanic management endpoints - Create and manage mechanic profiles"},
+            {"name": "Service Tickets", "description": "🎫 Service ticket management - Create, assign, and track service requests"},
+            {"name": "Inventory", "description": "📦 Inventory management - Track parts, supplies, and stock levels"}
         ]
     }
     
