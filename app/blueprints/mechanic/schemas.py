@@ -1,9 +1,11 @@
-from marshmallow import fields
+from marshmallow import fields, validate
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
 from app.models import Mechanic
 from app import db
 
 class MechanicSchema(SQLAlchemyAutoSchema):
+    email = fields.Email(required=True, validate=validate.Email())
+    
     class Meta:
         model = Mechanic
         load_instance = True

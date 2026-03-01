@@ -4,6 +4,7 @@ from sqlalchemy.orm import DeclarativeBase
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_caching import Cache
+from flasgger import Swagger
 
 # Create a base class for our models
 class Base(DeclarativeBase):
@@ -33,10 +34,54 @@ def create_app():
     app.config['CACHE_TYPE'] = 'SimpleCache'
     app.config['CACHE_DEFAULT_TIMEOUT'] = 300
     
+    # Configure Swagger
+    swagger_config = {
+        "headers": [],
+        "specs": [
+            {
+                "endpoint": 'apispec',
+                "route": '/apispec.json',
+                "rule_filter": lambda rule: True,
+                "model_filter": lambda tag: True,
+            }
+        ],
+        "static_url_path": "/flasgger_static",
+        "swagger_ui": True,
+        "specs_route": "/api-docs/"
+    }
+    
+    swagger_template = {
+        "swagger": "2.0",
+        "info": {
+            "title": "Mechanic Shop API",
+            "description": "A comprehensive RESTful API for managing mechanic shop operations including customers, mechanics, service tickets, and inventory",
+            "version": "1.0.0",
+            "contact": {
+                "name": "Mechanic Shop Team",
+                "url": "https://github.com/yousafzeb-byte/Mechanic-Shop"
+            }
+        },
+        "securityDefinitions": {
+            "Bearer": {
+                "type": "apiKey",
+                "name": "Authorization",
+                "in": "header",
+                "description": "JWT Authorization header using the Bearer scheme. Example: 'Bearer {token}'"
+            }
+        },
+        "tags": [
+            {"name": "Customers", "description": "Customer management endpoints"},
+            {"name": "Mechanics", "description": "Mechanic management endpoints"},
+            {"name": "Service Tickets", "description": "Service ticket management endpoints"},
+            {"name": "Inventory", "description": "Inventory management endpoints"}
+        ]
+    }
+    
     # Initialize extensions
     db.init_app(app)
     limiter.init_app(app)
     cache.init_app(app)
+    Swagger(app, config=swagger_config, template=swagger_template)
     
     # Import and register blueprints
     from app.blueprints.customer import customer_bp

@@ -1,9 +1,11 @@
-from marshmallow import fields
+from marshmallow import fields, validate
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
 from app.models import Customer
 from app import db
 
 class CustomerSchema(SQLAlchemyAutoSchema):
+    email = fields.Email(required=True, validate=validate.Email())
+    
     class Meta:
         model = Customer
         load_instance = True

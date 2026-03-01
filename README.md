@@ -55,6 +55,18 @@ This project implements a complete RESTful API for a Mechanic Shop with advanced
 - Many-to-many relationship with service tickets
 - Track parts used in each service
 
+### 📖 Documentation & Testing (NEW)
+
+- **Swagger/OpenAPI Documentation**: Interactive API documentation with Flasgger
+  - All 27 endpoints documented with request/response schemas
+  - JWT authentication support in Swagger UI
+  - Accessible at `/api-docs/`
+- **Comprehensive Unit Tests**: 71 tests covering all endpoints
+  - Positive and negative test cases
+  - Separate test database configuration
+  - Tests for authentication, authorization, validation, and business logic
+  - Coverage for all CRUD operations and advanced features
+
 ## 🚀 Quick Start
 
 ### 1. Install Dependencies
@@ -88,6 +100,104 @@ The API will be available at `http://localhost:5000`
 - **[API_DOCUMENTATION.md](API_DOCUMENTATION.md)** - Complete API reference with all endpoints
 - **[TESTING_GUIDE.md](TESTING_GUIDE.md)** - Testing instructions
 - **[PROJECT_SUMMARY.md](PROJECT_SUMMARY.md)** - Project overview
+
+### 📖 Swagger/OpenAPI Documentation
+
+This API includes interactive Swagger documentation powered by Flasgger:
+
+- **Swagger UI**: `http://localhost:5000/api-docs/`
+- **OpenAPI Spec**: `http://localhost:5000/apispec.json`
+
+The Swagger UI provides:
+
+- ✅ Interactive API documentation for all 27 endpoints
+- ✅ Try-it-out functionality to test endpoints directly
+- ✅ Request/response examples with proper schemas
+- ✅ JWT Bearer token authentication support (click "Authorize" button)
+- ✅ Organized by tags: Customers, Mechanics, Service Tickets, Inventory
+
+**To use protected endpoints in Swagger:**
+
+1. Login via `POST /customers/login` endpoint
+2. Copy the returned token
+3. Click the "Authorize" button at the top right
+4. Enter: `Bearer <your-token-here>`
+5. Click "Authorize" and then "Close"
+6. All protected endpoints will now include the token automatically
+
+## 🧪 Unit Testing
+
+This project includes comprehensive unit tests covering all endpoints:
+
+### Running Tests
+
+```bash
+# Activate virtual environment first
+venv\Scripts\activate  # Windows
+source venv/bin/activate  # Linux/Mac
+
+# Run all tests
+python -m unittest discover tests -v
+
+# Run specific test file
+python -m unittest tests.test_customers -v
+
+# Run specific test
+python -m unittest tests.test_customers.TestCustomerBlueprint.test_login_success -v
+```
+
+### Test Coverage
+
+- **71 total tests** covering all 27 API endpoints
+- **Positive tests**: Verify successful operations
+- **Negative tests**: Verify error handling and validation
+- **Test database**: Uses separate `mechanic_shop_test` database
+
+#### Test Breakdown by Blueprint
+
+- **Customers** (22 tests):
+  - Authentication (login, tokens)
+  - Authorization (protected routes)
+  - Rate limiting validation
+  - Pagination functionality
+  - Email validation
+  - CRUD operations
+
+- **Mechanics** (13 tests):
+  - CRUD operations
+  - Email uniqueness validation
+  - Advanced queries (ranking by tickets)
+  - Data type validation
+
+- **Service Tickets** (19 tests):
+  - CRUD operations
+  - Mechanic assignment/removal (many-to-many)
+  - Inventory part management
+  - Bulk editing mechanics
+  - Foreign key constraint validation
+
+- **Inventory** (17 tests):
+  - CRUD operations
+  - Price validation (type checking)
+  - Partial updates
+  - Edge cases (zero/negative prices)
+
+### Setting Up Test Database
+
+```bash
+# Create test database
+python create_test_database.py
+```
+
+This creates a separate `mechanic_shop_test` database to avoid interfering with development data.
+
+### Test Best Practices
+
+- Each test is independent (setUp/tearDown handle cleanup)
+- Junction tables cleared before main tables (proper foreign key handling)
+- Both success and failure scenarios tested
+- Token authentication tested thoroughly
+- Database constraints validated
 
 ## 🧪 Testing with Postman
 
@@ -163,6 +273,8 @@ After running `populate_database.py`:
 - **Marshmallow 4.2.1** - Serialization/validation
 - **python-jose 3.3.0** - JWT tokens
 - **bcrypt 4.1.2** - Password hashing
+- **Flasgger 0.9.7.1** - Swagger/OpenAPI documentation (NEW)
+- **unittest** - Python built-in testing framework (NEW)
 - **MySQL Connector** - Database driver
 
 ## 📁 Project Structure
@@ -170,19 +282,27 @@ After running `populate_database.py`:
 ```
 Mechanic Shop/
 ├── app/
-│   ├── __init__.py           # App factory with rate limiting & caching
+│   ├── __init__.py           # App factory with rate limiting, caching & Swagger
 │   ├── models.py             # Database models (includes Inventory)
-│   ├── utils.py              # Token auth utilities (NEW)
+│   ├── utils.py              # Token auth utilities
 │   └── blueprints/
-│       ├── customer/         # Customer routes (auth, pagination)
-│       ├── mechanic/         # Mechanic routes (advanced queries)
-│       ├── service_ticket/   # Service ticket routes
-│       └── inventory/        # Inventory routes (NEW)
-├── requirements.txt          # Updated with new packages
-├── update_database.py        # Database update script (NEW)
-├── populate_database.py      # Sample data script (NEW)
-├── API_DOCUMENTATION.md      # Complete API docs (NEW)
-└── Mechanic_Shop_Advanced_API.postman_collection.json (NEW)
+│       ├── customer/         # Customer routes (auth, pagination, Swagger docs)
+│       ├── mechanic/         # Mechanic routes (advanced queries, Swagger docs)
+│       ├── service_ticket/   # Service ticket routes (Swagger docs)
+│       └── inventory/        # Inventory routes (Swagger docs)
+├── tests/                    # Unit tests (NEW)
+│   ├── __init__.py           # Test package initialization
+│   ├── test_customers.py     # Customer endpoint tests (22 tests)
+│   ├── test_mechanics.py     # Mechanic endpoint tests (13 tests)
+│   ├── test_service_tickets.py # Service ticket tests (19 tests)
+│   ├── test_inventory.py     # Inventory endpoint tests (17 tests)
+│   └── README.md             # Testing documentation
+├── requirements.txt          # Updated with Flasgger
+├── create_test_database.py   # Test database setup script (NEW)
+├── update_database.py        # Database update script
+├── populate_database.py      # Sample data script
+├── API_DOCUMENTATION.md      # Complete API docs
+└── Mechanic_Shop_Advanced_API.postman_collection.json
 ```
 
 ## ✅ Project Checklist
