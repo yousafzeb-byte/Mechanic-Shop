@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, redirect
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase
 from flask_limiter import Limiter
@@ -102,5 +102,11 @@ def create_app(config_class=None):
     app.register_blueprint(mechanic_bp, url_prefix='/mechanics')
     app.register_blueprint(service_ticket_bp, url_prefix='/service-tickets')
     app.register_blueprint(inventory_bp, url_prefix='/inventory')
+    
+    # Homepage route - redirect to API documentation
+    @app.route('/')
+    def index():
+        """Redirect root URL to Swagger API documentation"""
+        return redirect('/api-docs/')
     
     return app

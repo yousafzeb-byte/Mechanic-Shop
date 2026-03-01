@@ -2,9 +2,21 @@ from app import create_app, db
 from app.models import Customer, ServiceTicket, Mechanic, Inventory
 from app.utils import hash_password
 from datetime import date
+import os
+import sys
 
-# Create the Flask app
-app = create_app()
+# Determine which config to use
+if len(sys.argv) > 1 and sys.argv[1] == '--production':
+    from config import ProductionConfig
+    print("Using ProductionConfig - will populate PRODUCTION database on Render")
+    config = ProductionConfig
+else:
+    from config import DevelopmentConfig
+    print("Using DevelopmentConfig - will populate LOCAL development database")
+    config = DevelopmentConfig
+
+# Create the Flask app with appropriate config
+app = create_app(config)
 
 with app.app_context():
     print("Populating database with sample data...")
