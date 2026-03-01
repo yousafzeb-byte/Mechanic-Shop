@@ -3,6 +3,7 @@
 ![Flask](https://img.shields.io/badge/Flask-3.1.2-green)
 ![Python](https://img.shields.io/badge/Python-3.14-blue)
 ![MySQL](https://img.shields.io/badge/MySQL-8.0-orange)
+![CI/CD Pipeline](https://github.com/yousafzeb-byte/Mechanic-Shop/actions/workflows/main.yaml/badge.svg)
 
 ## 🎯 Project: Advanced API Development
 
@@ -388,11 +389,13 @@ This project is deployment-ready with full CI/CD pipeline support!
 ⚠️ **Important:** Sensitive data is managed via environment variables in production!
 
 **Secret Key Management:**
+
 - Development: Set in `.env` file (not committed)
 - Production: Set in Render environment variables
 - Generate secure key: `python -c "import secrets; print(secrets.token_hex(32))"`
 
 **Database Credentials:**
+
 - Never commit database passwords to version control
 - Use `.env` for local development (in `.gitignore`)
 - Use Render environment variables for production
