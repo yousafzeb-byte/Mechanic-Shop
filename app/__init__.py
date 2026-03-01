@@ -5,6 +5,7 @@ from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_caching import Cache
 from flasgger import Swagger
+import os
 
 # Create a base class for our models
 class Base(DeclarativeBase):
@@ -23,18 +24,21 @@ limiter = Limiter(
 # Instantiate Cache
 cache = Cache()
 
-def create_app():
+def create_app(config_class=None):
     app = Flask(__name__)
     
-    # Configure the database
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:112233@localhost/mechanic_shop'
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    # Load configuration
+    if config_class:
+        app.config.from_object(config_class)
+    else:
+        # Default development configuration if no config provided
+        from config import DevelopmentConfig
+        app.config.from_object(DevelopmentConfig)
     
-    # Configure caching
-    app.config['CACHE_TYPE'] = 'SimpleCache'
-    app.config['CACHE_DEFAULT_TIMEOUT'] = 300
+    # Determine if we're in production based on environment or config
+    is_production = os.getenv('FLASK_ENV') == 'production' or app.config.get('DEBUG') is False
     
-    # Configure Swagger
+    # Configure Swagger with dynamic host and scheme
     swagger_config = {
         "headers": [],
         "specs": [
@@ -50,6 +54,9 @@ def create_app():
         "specs_route": "/api-docs/"
     }
     
+    # Get the base URL from environment variable or use localhost for development
+    base_url = os.getenv('BASE_URL', 'localhost:5000')
+    
     swagger_template = {
         "swagger": "2.0",
         "info": {
@@ -61,6 +68,8 @@ def create_app():
                 "url": "https://github.com/yousafzeb-byte/Mechanic-Shop"
             }
         },
+        "host": base_url,
+        "schemes": ["https" if is_production else "http"],
         "securityDefinitions": {
             "Bearer": {
                 "type": "apiKey",

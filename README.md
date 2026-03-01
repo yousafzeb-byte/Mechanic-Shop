@@ -100,12 +100,13 @@ The API will be available at `http://localhost:5000`
 - **[API_DOCUMENTATION.md](API_DOCUMENTATION.md)** - Complete API reference with all endpoints
 - **[TESTING_GUIDE.md](TESTING_GUIDE.md)** - Testing instructions
 - **[PROJECT_SUMMARY.md](PROJECT_SUMMARY.md)** - Project overview
+- **[DEPLOYMENT.md](DEPLOYMENT.md)** - Production deployment guide with CI/CD setup (NEW)
 
 ### 📖 Swagger/OpenAPI Documentation
 
 This API includes interactive Swagger documentation powered by Flasgger:
 
-- **Swagger UI**: `http://localhost:5000/api-docs/`
+- **Swagger UI**: `http://localhost:5000/api-docs/` (local) or `https://your-app-url/api-docs/` (production)
 - **OpenAPI Spec**: `http://localhost:5000/apispec.json`
 
 The Swagger UI provides:
@@ -335,22 +336,66 @@ Mechanic Shop/
 - ✅ Inventory blueprint with CRUD routes
 - ✅ Add part to ticket route
 
+### Documentation & Testing
+
+- ✅ Swagger/OpenAPI documentation for all 27 endpoints
+- ✅ 71 comprehensive unit tests (positive and negative)
+- ✅ Separate test database configuration
+- ✅ Complete API documentation
+
+### Deployment & CI/CD
+
+- ✅ Production configuration with environment variables
+- ✅ PostgreSQL support for Render deployment
+- ✅ Gunicorn production server
+- ✅ GitHub Actions CI/CD pipeline
+- ✅ Automated testing on push
+- ✅ Automated deployment to Render
+- ✅ Dynamic Swagger configuration (http/https)
+
+## 🚀 Production Deployment
+
+This project is deployment-ready with full CI/CD pipeline support!
+
+### Quick Deploy to Render
+
+1. **Database**: Create PostgreSQL database on Render
+2. **Web Service**: Deploy from your GitHub repository
+3. **Environment Variables**: Set `DATABASE_URI`, `SECRET_KEY`, `FLASK_ENV=production`, `BASE_URL`
+4. **CI/CD**: Add GitHub secrets (`RENDER_API_KEY`, `SERVICE_ID`)
+5. **Done**: Auto-deploy on every push to main!
+
+**See [DEPLOYMENT.md](DEPLOYMENT.md) for complete step-by-step deployment guide.**
+
+### CI/CD Pipeline Features
+
+- ✅ **Build Job**: Python syntax validation
+- ✅ **Test Job**: Runs all 71 unit tests with MySQL service
+- ✅ **Deploy Job**: Auto-deploys to Render on successful tests
+- ✅ **Workflow**: Triggered on push/PR to main branch
+
+### Production Features
+
+- **Configuration Management**: Separate dev/test/production configs
+- **Environment Variables**: Secure credential management with `.env`
+- **Database Support**: MySQL (development) + PostgreSQL (production)
+- **Production Server**: Gunicorn WSGI server
+- **Auto-scaling**: Ready for Render's scaling features
+- **HTTPS**: Automatic SSL/TLS in production
+
 ## 🔒 Security Notes
 
-⚠️ **Important:** Change the secret key before production deployment!
+⚠️ **Important:** Sensitive data is managed via environment variables in production!
 
-In `app/utils.py`:
+**Secret Key Management:**
+- Development: Set in `.env` file (not committed)
+- Production: Set in Render environment variables
+- Generate secure key: `python -c "import secrets; print(secrets.token_hex(32))"`
 
-```python
-SECRET_KEY = "your-secret-key-change-this-in-production"
-```
-
-Generate a secure key:
-
-```python
-import secrets
-print(secrets.token_hex(32))
-```
+**Database Credentials:**
+- Never commit database passwords to version control
+- Use `.env` for local development (in `.gitignore`)
+- Use Render environment variables for production
 
 ## 📝 Additional Features
 

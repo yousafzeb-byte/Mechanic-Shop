@@ -1,6 +1,13 @@
+"""
+Local Development Server
+Use this file for local development only.
+For production deployment, use flask_app.py with Gunicorn.
+"""
 from app import create_app, db
+from config import DevelopmentConfig
 
-app = create_app()
+# Create app with development configuration
+app = create_app(DevelopmentConfig)
 
 # Create tables if they don't exist
 with app.app_context():

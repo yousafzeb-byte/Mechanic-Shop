@@ -1,12 +1,14 @@
 from jose import jwt, JWTError
 from datetime import datetime, timedelta
 from functools import wraps
-from flask import request, jsonify
+from flask import request, jsonify, current_app
 import bcrypt
 
-# Secret key for JWT encoding/decoding
-SECRET_KEY = "your-secret-key-change-this-in-production"
 ALGORITHM = "HS256"
+
+def get_secret_key():
+    """Get SECRET_KEY from Flask app config"""
+    return current_app.config.get('SECRET_KEY', 'dev-secret-key-fallback')
 
 def hash_password(password):
     """Hash a password using bcrypt"""
@@ -32,7 +34,7 @@ def encode_token(customer_id):
         'sub': str(customer_id)  # Subject (customer ID) - must be string
     }
     
-    token = jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
+    token = jwt.encode(payload, get_secret_key(), algorithm=ALGORITHM)
     return token
 
 def decode_token(token):
@@ -46,7 +48,7 @@ def decode_token(token):
         The customer_id from the token, or None if invalid
     """
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        payload = jwt.decode(token, get_secret_key(), algorithms=[ALGORITHM])
         return int(payload['sub'])  # Convert string back to integer
     except JWTError:
         return None
