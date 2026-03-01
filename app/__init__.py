@@ -123,7 +123,14 @@ Click the **Authorize** button (🔓) and enter: `Bearer {your-token}`
     db.init_app(app)
     limiter.init_app(app)
     cache.init_app(app)
-    CORS(app)  # Enable CORS for all routes
+    
+    # Enable CORS for all routes with explicit configuration
+    CORS(app, 
+         resources={r"/*": {"origins": "*"}},
+         allow_headers=["Content-Type", "Authorization"],
+         methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+         supports_credentials=True)
+    
     Swagger(app, config=swagger_config, template=swagger_template)
     
     # Import and register blueprints
