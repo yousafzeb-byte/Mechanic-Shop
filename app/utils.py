@@ -29,7 +29,7 @@ def encode_token(customer_id):
     payload = {
         'exp': datetime.utcnow() + timedelta(days=1),  # Token expires in 1 day
         'iat': datetime.utcnow(),  # Token issued at
-        'sub': customer_id  # Subject (customer ID)
+        'sub': str(customer_id)  # Subject (customer ID) - must be string
     }
     
     token = jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
@@ -47,7 +47,7 @@ def decode_token(token):
     """
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        return payload['sub']
+        return int(payload['sub'])  # Convert string back to integer
     except JWTError:
         return None
 

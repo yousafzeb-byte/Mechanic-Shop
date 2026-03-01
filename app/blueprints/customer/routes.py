@@ -146,3 +146,13 @@ def delete_customer(customer_id, id):
     db.session.delete(customer)
     db.session.commit()
     return jsonify({"message": f"Customer {id} deleted successfully"}), 200
+
+# DELETE /admin/<int:id> - Admin delete (no authentication required - for testing only)
+@customer_bp.route('/admin/<int:id>', methods=['DELETE'])
+def admin_delete_customer(id):
+    customer = db.session.get(Customer, id)
+    if not customer:
+        return jsonify({"error": "Customer not found"}), 404
+    db.session.delete(customer)
+    db.session.commit()
+    return jsonify({"message": f"Customer {id} deleted successfully (admin)"}), 200
