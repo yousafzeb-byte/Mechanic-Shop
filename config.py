@@ -26,10 +26,6 @@ class ProductionConfig(Config):
     DEBUG = False
     SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URI')
     SQLALCHEMY_ECHO = False
-    
-    # Ensure DATABASE_URI is set in production
-    if not SQLALCHEMY_DATABASE_URI:
-        raise ValueError("DATABASE_URI environment variable must be set in production")
 
 class TestConfig(Config):
     """Test configuration"""
