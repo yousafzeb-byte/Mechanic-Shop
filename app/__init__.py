@@ -8,6 +8,13 @@ from flask_cors import CORS
 from flasgger import Swagger
 import os
 
+
+def _normalize_base_url(value, default='localhost:5000'):
+    if not value:
+        return default
+    normalized = value.strip().replace('http://', '').replace('https://', '')
+    return normalized.rstrip('/')
+
 # Create a base class for our models
 class Base(DeclarativeBase):
     pass
@@ -65,8 +72,8 @@ def create_app(config_class=None):
         }
     }
     
-    # Get the base URL from environment variable or use localhost for development
-    base_url = os.getenv('BASE_URL', 'localhost:5000')
+    # Swagger host must be the domain only (no scheme), e.g. api.example.com
+    base_url = _normalize_base_url(os.getenv('BASE_URL'))
     
     swagger_template = {
         "swagger": "2.0",
