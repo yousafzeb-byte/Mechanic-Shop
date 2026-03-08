@@ -366,6 +366,20 @@
       "item": [
         {
           "name": "Create Inventory Part",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set(\"inventory_id\", jsonData.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [
@@ -401,7 +415,7 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/inventory/1"
+              "raw": "{{base_url}}/inventory/{{inventory_id}}"
             },
             "description": "Get a specific inventory part by ID"
           }
@@ -421,7 +435,7 @@
               "raw": "{\n    \"name\": \"Updated Part Name\",\n    \"price\": 59.99\n}"
             },
             "url": {
-              "raw": "{{base_url}}/inventory/1"
+              "raw": "{{base_url}}/inventory/{{inventory_id}}"
             },
             "description": "Update an inventory part"
           }
@@ -432,7 +446,7 @@
             "method": "DELETE",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/inventory/1"
+              "raw": "{{base_url}}/inventory/{{inventory_id}}"
             },
             "description": "Delete an inventory part"
           }
@@ -443,7 +457,8 @@
   ],
   "variable": [
     {
-      "key": "base_url", "value": "http://127.0.0.1:5000",
+      "key": "base_url",
+      "value": "http://127.0.0.1:5000",
       "type": "string"
     },
     {
@@ -453,6 +468,11 @@
     },
     {
       "key": "customer_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "inventory_id",
       "value": "",
       "type": "string"
     }
