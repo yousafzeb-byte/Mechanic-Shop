@@ -4,12 +4,41 @@
     "description": "Complete API testing collection including Rate Limiting, Token Authentication, Caching, Pagination, and Inventory management",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "const envBase = pm.environment.get('base_url');",
+          "const colBase = pm.collectionVariables.get('base_url');",
+          "const fallback = 'https://mechanic-shop-api-9oms.onrender.com';",
+          "const resolved = (envBase && envBase.trim()) ? envBase : ((colBase && colBase.trim()) ? colBase : fallback);",
+          "pm.variables.set('base_url', resolved);"
+        ]
+      }
+    }
+  ],
   "item": [
     {
       "name": "Customers",
       "item": [
         {
           "name": "Create Customer (Rate Limited)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set(\"customer_id\", jsonData.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [
@@ -109,7 +138,7 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/customers/1"
+              "raw": "{{base_url}}/customers/{{customer_id}}"
             },
             "description": "Get a specific customer by ID"
           }
@@ -164,6 +193,20 @@
       "item": [
         {
           "name": "Create Mechanic",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set(\"mechanic_id\", jsonData.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [
@@ -210,7 +253,7 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/mechanics/1"
+              "raw": "{{base_url}}/mechanics/{{mechanic_id}}"
             },
             "description": "Get a specific mechanic by ID"
           }
@@ -230,7 +273,7 @@
               "raw": "{\n    \"salary\": 75000.00\n}"
             },
             "url": {
-              "raw": "{{base_url}}/mechanics/1"
+              "raw": "{{base_url}}/mechanics/{{mechanic_id}}"
             },
             "description": "Update mechanic information"
           }
@@ -241,7 +284,7 @@
             "method": "DELETE",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/mechanics/1"
+              "raw": "{{base_url}}/mechanics/{{mechanic_id}}"
             },
             "description": "Delete a mechanic"
           }
@@ -458,7 +501,7 @@
   "variable": [
     {
       "key": "base_url",
-      "value": "http://127.0.0.1:5000",
+      "value": "https://mechanic-shop-api-9oms.onrender.com",
       "type": "string"
     },
     {
@@ -468,6 +511,11 @@
     },
     {
       "key": "customer_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "mechanic_id",
       "value": "",
       "type": "string"
     },
