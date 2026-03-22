@@ -24,6 +24,16 @@ This project implements a complete RESTful API for a Mechanic Shop with advanced
 - Marshmallow validation/serialization to enforce request and response contracts.
 - Token-based auth decorator to secure protected routes.
 
+## Visual Showcase
+
+Add screenshots and demo GIFs under `docs/media/` to make this project faster to evaluate for recruiters.
+
+```md
+![Swagger Docs](docs/media/swagger-docs.png)
+![JWT Auth Flow](docs/media/jwt-auth-flow.gif)
+![Postman Collection Run](docs/media/postman-collection.png)
+```
+
 - ✅ **Rate Limiting** - Protection against API abuse
 - ✅ **Token Authentication** - JWT-based customer authentication
 - ✅ **Caching** - Improved performance for frequently accessed data
