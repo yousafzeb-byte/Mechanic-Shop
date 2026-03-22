@@ -9,6 +9,21 @@
 
 This project implements a complete RESTful API for a Mechanic Shop with advanced features including:
 
+## Recruiter Snapshot
+
+- Built a production-style Flask API with authentication, authorization, caching, rate limiting, and OpenAPI docs.
+- Implemented 27 documented endpoints across Customers, Mechanics, Service Tickets, and Inventory resources.
+- Wrote 71 automated tests covering positive and negative flows, auth guards, and business rules.
+- Added CI/CD automation and deployment configuration for cloud hosting.
+
+## Architecture At A Glance
+
+- Application Factory pattern for environment-specific app creation and testability.
+- Blueprint-based route modules for clear domain separation.
+- SQLAlchemy models for relational entities and many-to-many junction tables.
+- Marshmallow validation/serialization to enforce request and response contracts.
+- Token-based auth decorator to secure protected routes.
+
 - ✅ **Rate Limiting** - Protection against API abuse
 - ✅ **Token Authentication** - JWT-based customer authentication
 - ✅ **Caching** - Improved performance for frequently accessed data
