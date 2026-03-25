@@ -1,0 +1,23 @@
+name: Keep Render Service Warm
+
+on:
+  schedule:
+    # Every 15 minutes
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+
+jobs:
+  ping-render:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Render root endpoint
+        run: |
+          set -eu
+          curl --fail --silent --show-error --max-time 30 --retry 2 --retry-delay 5 \
+            'https://mechanic-shop-api-9oms.onrender.com/'
+
+      - name: Ping Swagger docs endpoint
+        run: |
+          set -eu
+          curl --fail --silent --show-error --max-time 30 --retry 2 --retry-delay 5 \
+            'https://mechanic-shop-api-9oms.onrender.com/api-docs/'
