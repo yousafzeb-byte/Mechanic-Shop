@@ -154,7 +154,8 @@ Your Swagger is already configured to automatically use:
 
 - **https** scheme in production
 - **http** scheme in development
-- Your `BASE_URL` environment variable as the host
+- The incoming request host by default
+- Your `BASE_URL` environment variable only when you want to override the advertised host explicitly
 
 The configuration in `app/__init__.py` handles this dynamically based on the `FLASK_ENV` setting.
 

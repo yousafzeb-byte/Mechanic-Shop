@@ -68,16 +68,27 @@ jobs:
 
       - name: Wait for MySQL
         run: |
-          sleep 10
+          python - <<'PY'
+          import time
+          import mysql.connector
 
-      - name: Set up test environment
-        env:
-          DATABASE_URI: mysql+mysqlconnector://root:testpassword@127.0.0.1:3306/mechanic_shop_test
-          SECRET_KEY: test-secret-key-for-ci
-          FLASK_ENV: testing
-        run: |
-          export DATABASE_URI=$DATABASE_URI
-          export SECRET_KEY=$SECRET_KEY
+          for attempt in range(30):
+              try:
+                  connection = mysql.connector.connect(
+                      host='127.0.0.1',
+                      port=3306,
+                      user='root',
+                      password='testpassword',
+                      database='mechanic_shop_test'
+                  )
+                  connection.close()
+                  print('MySQL is ready')
+                  break
+              except mysql.connector.Error:
+                  if attempt == 29:
+                      raise
+                  time.sleep(2)
+          PY
 
       - name: Run unit tests
         env:
@@ -100,7 +111,12 @@ jobs:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
           SERVICE_ID: ${{ secrets.SERVICE_ID }}
         run: |
-          curl -X POST "https://api.render.com/v1/services/$SERVICE_ID/deploys" \
+          set -eu
+
+          test -n "$RENDER_API_KEY"
+          test -n "$SERVICE_ID"
+
+          curl --fail --silent --show-error -X POST "https://api.render.com/v1/services/$SERVICE_ID/deploys" \
             -H "Authorization: Bearer $RENDER_API_KEY" \
             -H "Content-Type: application/json" \
             -d '{}'

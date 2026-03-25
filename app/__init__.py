@@ -9,9 +9,9 @@ from flasgger import Swagger
 import os
 
 
-def _normalize_base_url(value, default='localhost:5000'):
+def _normalize_base_url(value):
     if not value:
-        return default
+        return None
     normalized = value.strip().replace('http://', '').replace('https://', '')
     return normalized.rstrip('/')
 
@@ -125,6 +125,9 @@ Click the **Authorize** button (🔓) and enter: `Bearer {your-token}`
             {"name": "Inventory", "description": "📦 Inventory management - Track parts, supplies, and stock levels"}
         ]
     }
+
+    if base_url:
+        swagger_template["host"] = base_url
     
     # Initialize extensions
     db.init_app(app)
