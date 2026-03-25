@@ -68,27 +68,14 @@ jobs:
 
       - name: Wait for MySQL
         run: |
-          python - <<'PY'
-          import time
-          import mysql.connector
-
-          for attempt in range(30):
-              try:
-                  connection = mysql.connector.connect(
-                      host='127.0.0.1',
-                      port=3306,
-                      user='root',
-                      password='testpassword',
-                      database='mechanic_shop_test'
-                  )
-                  connection.close()
-                  print('MySQL is ready')
-                  break
-              except mysql.connector.Error:
-                  if attempt == 29:
-                      raise
-                  time.sleep(2)
-          PY
+          for i in $(seq 1 30); do
+            if mysqladmin ping -h 127.0.0.1 -u root -ptestpassword --silent 2>/dev/null; then
+              echo "MySQL is ready"
+              break
+            fi
+            echo "Waiting for MySQL... attempt $i/30"
+            sleep 2
+          done
 
       - name: Run unit tests
         env:
