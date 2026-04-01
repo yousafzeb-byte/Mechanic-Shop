@@ -1,9 +1,9 @@
-# Mechanic Shop API - Advanced Features Edition
+# Mechanic Shop API - Flask | Python | MySQL | CI/CD Pipeline
 
-![Flask](https://img.shields.io/badge/Flask-3.1.2-green)
-![Python](https://img.shields.io/badge/Python-3.14-blue)
-![MySQL](https://img.shields.io/badge/MySQL-8.0-orange)
-![CI/CD Pipeline](https://github.com/yousafzeb-byte/Mechanic-Shop/actions/workflows/main.yaml/badge.svg)
+[![Flask](https://img.shields.io/badge/Flask-3.1.2-black)](https://flask.palletsprojects.com/)
+[![Python](https://img.shields.io/badge/Python-3.14-blue)](https://www.python.org/)
+[![MySQL](https://img.shields.io/badge/MySQL-8.0-orange)](https://www.mysql.com/)
+[![CI](https://github.com/yousafzeb-byte/Mechanic-Shop/actions/workflows/main.yaml/badge.svg)](https://github.com/yousafzeb-byte/Mechanic-Shop/actions/workflows/main.yaml)
 
 ## 🎯 Project: Advanced API Development
 
